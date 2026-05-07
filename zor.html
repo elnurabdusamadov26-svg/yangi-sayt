@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ ZOR SAYT</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root {
+  --neon1: #00f7ff;
+  --neon2: #ff00ff;
+  --neon3: #ff6600;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ===== CANVAS BACKGROUND ===== */
+#bg { position: fixed; top:0; left:0; z-index:0; }
+
+/* ===== NAVBAR ===== */
+nav {
+  position: fixed; top:0; left:0; right:0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,247,255,0.2);
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 3px;
+}
+
+nav ul { list-style:none; display:flex; gap:36px; }
+nav ul li a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+nav ul li a:hover { color: var(--neon1); text-shadow: 0 0 10px var(--neon1); }
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-badge {
+  background: rgba(0,247,255,0.1);
+  border: 1px solid var(--neon1);
+  color: var(--neon1);
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  margin-bottom: 30px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100%{ box-shadow: 0 0 10px var(--neon1); }
+  50%{ box-shadow: 0 0 30px var(--neon1), 0 0 60px var(--neon1); }
+}
+
+.hero h1 {
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--neon1), var(--neon2), var(--neon3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: gradMove 3s infinite;
+}
+
+@keyframes gradMove {
+  0%{ background-position: 0%; }
+  50%{ background-position: 100%; }
+  100%{ background-position: 0%; }
+}
+
+.hero p {
+  font-size: 20px;
+  color: #888;
+  max-width: 600px;
+  margin-bottom: 44px;
+  line-height: 1.7;
+}
+
+.btn-group { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+
+.btn {
+  padding: 16px 44px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+  letter-spacing: 1px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--neon1), var(--neon2));
+  color: #000;
+  box-shadow: 0 0 30px rgba(0,247,255,0.4);
+}
+.btn-primary:hover { transform: scale(1.07); box-shadow: 0 0 50px rgba(0,247,255,0.7); }
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.btn-outline:hover { border-color: var(--neon1); color: var(--neon1); transform: scale(1.05); }
+
+/* ===== STATS ===== */
+.stats {
+  position: relative; z-index:1;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding: 60px 20px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  flex-wrap: wrap;
+}
+
+.stat { text-align:center; }
+.stat-num {
+  font-size: 52px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-label { color: #555; font-size: 14px; letter-spacing: 2px; margin-top: 6px; }
+
+/* ===== CARDS ===== */
+.section {
+  position: relative; z-index:1;
+  padding: 100px 60px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+.section-title span {
+  background: linear-gradient(90deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.section-sub { color: #555; margin-bottom: 60px; font-size: 16px; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 40px 30px;
+  transition: 0.4s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content:'';
+  position:absolute;
+  top:-50%; left:-50%;
+  width:200%; height:200%;
+  background: radial-gradient(circle, rgba(0,247,255,0.06) 0%, transparent 60%);
+  opacity:0;
+  transition:0.4s;
+}
+
+.card:hover::before { opacity:1; }
+.card:hover {
+  border-color: rgba(0,247,255,0.4);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(0,247,255,0.1);
+}
+
+.card-icon { font-size: 48px; margin-bottom: 20px; }
+.card h3 { font-size: 22px; margin-bottom: 12px; }
+.card p { color: #666; line-height: 1.7; font-size: 15px; }
+
+/* ===== SHOWCASE ===== */
+.showcase {
+  position: relative; z-index:1;
+  padding: 100px 60px;
+  background: rgba(255,255,255,0.01);
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.showcase-text h2 { font-size: 40px; font-weight:900; margin-bottom:20px; line-height:1.2; }
+.showcase-text h2 span {
+  background: linear-gradient(90deg, var(--neon3), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.showcase-text p { color:#666; line-height:1.8; margin-bottom:30px; }
+
+.feature-list { list-style:none; }
+.feature-list li {
+  padding: 10px 0;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+}
+.feature-list li::before {
+  content:'✓';
+  color: var(--neon1);
+  font-weight:900;
+  font-size:18px;
+}
+
+.showcase-visual {
+  background: rgba(0,247,255,0.03);
+  border: 1px solid rgba(0,247,255,0.15);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.code-block {
+  background: #0d0d0d;
+  border-radius: 12px;
+  padding: 24px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 2;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.code-block .kw { color: var(--neon2); }
+.code-block .fn { color: var(--neon1); }
+.code-block .str { color: #ff9944; }
+.code-block .cm { color: #444; }
+
+/* ===== TESTIMONIALS ===== */
+.testimonials {
+  position: relative; z-index:1;
+  padding: 100px 60px;
+  text-align:center;
+}
+
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testi-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: left;
+  transition: 0.3s;
+}
+.testi-card:hover { border-color: rgba(255,0,255,0.3); transform: translateY(-6px); }
+
+.stars { color: #ffcc00; font-size: 18px; margin-bottom: 16px; }
+.testi-card p { color: #777; line-height: 1.8; margin-bottom: 24px; font-size: 15px; }
+.testi-author { display:flex; align-items:center; gap:14px; }
+.avatar {
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  background: linear-gradient(135deg, var(--neon1), var(--neon2));
+}
+.author-info strong { display:block; font-size:15px; }
+.author-info span { color:#555; font-size:13px; }
+
+/* ===== CTA ===== */
+.cta {
+  position: relative; z-index:1;
+  padding: 120px 60px;
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(0,247,255,0.05) 0%, transparent 70%);
+}
+
+.cta h2 { font-size: 56px; font-weight:900; margin-bottom:20px; }
+.cta h2 span {
+  background: linear-gradient(90deg, var(--neon1), var(--neon2), var(--neon3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  animation: gradMove 3s infinite;
+}
+.cta p { color:#666; font-size:18px; margin-bottom:44px; }
+
+/* ===== FOOTER ===== */
+footer {
+  position: relative; z-index:1;
+  padding: 40px 60px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+footer .logo { font-size:20px; }
+footer p { color:#444; font-size:14px; }
+
+/* ===== CURSOR ===== */
+#cursor {
+  width: 20px; height: 20px;
+  border: 2px solid var(--neon1);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+#cursor2 {
+  width: 6px; height: 6px;
+  background: var(--neon1);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal { opacity:0; transform:translateY(40px); transition:0.8s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #0d0d0d;
+  border: 1px solid rgba(0,247,255,0.25);
+  border-radius: 20px;
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  animation: modalIn 0.35s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform: scale(0.9) translateY(20px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+.modal-close {
+  position: absolute; top:18px; right:22px;
+  background: none; border: none;
+  color: #555; font-size: 24px;
+  cursor: pointer; transition: 0.2s;
+}
+.modal-close:hover { color: #fff; }
+.modal h2 {
+  font-size: 28px; font-weight: 900;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.modal p.sub { color: #555; font-size: 14px; margin-bottom: 32px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display:block; color:#888; font-size:13px; margin-bottom:7px; letter-spacing:1px; }
+.form-group input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 13px 16px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+.form-group input:focus { border-color: var(--neon1); box-shadow: 0 0 12px rgba(0,247,255,0.15); }
+.modal .btn-primary { width:100%; margin-top:8px; padding:14px; font-size:16px; border-radius:8px; }
+.modal-divider { text-align:center; color:#333; margin:20px 0; font-size:13px; }
+.social-btns { display:flex; gap:12px; }
+.social-btn {
+  flex:1; padding:11px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius:8px; color:#aaa;
+  font-size:14px; cursor:pointer;
+  transition:0.3s; text-align:center;
+}
+.social-btn:hover { border-color: var(--neon1); color:#fff; }
+.modal-footer { text-align:center; margin-top:20px; color:#444; font-size:13px; }
+.modal-footer a { color: var(--neon1); text-decoration:none; }
+.demo-modal { max-width: 780px; padding: 0; overflow: hidden; }
+.demo-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; justify-content:space-between; align-items:center;
+}
+.demo-header h2 {
+  font-size: 22px;
+  background: linear-gradient(90deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.demo-body { padding: 32px; }
+.demo-screen {
+  background: #000;
+  border-radius: 12px;
+  border: 1px solid rgba(0,247,255,0.15);
+  height: 300px;
+  display: flex; align-items:center; justify-content:center;
+  flex-direction: column; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.demo-screen canvas { position:absolute; inset:0; width:100%; height:100%; }
+.demo-label {
+  position: relative; z-index:1;
+  font-size: 32px; font-weight:900;
+  background: linear-gradient(135deg, var(--neon1), var(--neon2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradMove 3s infinite; background-size: 200%;
+}
+.demo-sub { position:relative; z-index:1; color:#555; font-size:14px; }
+.demo-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 24px; }
+.demo-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 16px; text-align:center;
+}
+.demo-stat strong { display:block; font-size:24px; color: var(--neon1); }
+.demo-stat span { color:#555; font-size:12px; }
+
+@media(max-width:768px){
+  nav{ padding:16px 24px; }
+  nav ul{ display:none; }
+  .section, .showcase, .testimonials, .cta{ padding:60px 24px; }
+  .showcase-grid{ grid-template-columns:1fr; }
+  footer{ flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div id="cursor"></div>
+<div id="cursor2"></div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    <h2>Xush Kelibsiz! 👋</h2>
+    <p class="sub">Bepul hisob yarating. Kredit karta shart emas.</p>
+    <div class="form-group"><label>ISM FAMILIYA</label><input type="text" placeholder="Jasur Toshmatov" id="reg-name"></div>
+    <div class="form-group"><label>EMAIL</label><input type="email" placeholder="email@example.com" id="reg-email"></div>
+    <div class="form-group"><label>PAROL</label><input type="password" placeholder="••••••••" id="reg-pass"></div>
+    <button class="btn btn-primary" onclick="handleRegister()">Ro'yxatdan O'tish →</button>
+    <div class="modal-divider">yoki</div>
+    <div class="social-btns">
+      <button class="social-btn" onclick="socialLogin('Google')">🌐 Google</button>
+      <button class="social-btn" onclick="socialLogin('GitHub')">🐙 GitHub</button>
+    </div>
+    <div class="modal-footer">Hisobingiz bormi? <a href="#" onclick="switchModal('registerModal','loginModal')">Kirish</a></div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <h2>Qaytib Keldingiz! 🔥</h2>
+    <p class="sub">Hisobingizga kiring.</p>
+    <div class="form-group"><label>EMAIL</label><input type="email" placeholder="email@example.com" id="login-email"></div>
+    <div class="form-group"><label>PAROL</label><input type="password" placeholder="••••••••" id="login-pass"></div>
+    <button class="btn btn-primary" onclick="handleLogin()">Kirish →</button>
+    <div class="modal-divider">yoki</div>
+    <div class="social-btns">
+      <button class="social-btn" onclick="socialLogin('Google')">🌐 Google</button>
+      <button class="social-btn" onclick="socialLogin('GitHub')">🐙 GitHub</button>
+    </div>
+    <div class="modal-footer">Hisob yo'qmi? <a href="#" onclick="switchModal('loginModal','registerModal')">Ro'yxatdan o'tish</a></div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal" style="text-align:center;padding:60px 44px;">
+    <button class="modal-close" onclick="closeModal('successModal')">✕</button>
+    <div style="font-size:64px;margin-bottom:20px;">🎉</div>
+    <h2 style="font-size:32px;margin-bottom:12px;">Tabriklaymiz!</h2>
+    <p style="color:#666;margin-bottom:32px;" id="successMsg">Hisobingiz muvaffaqiyatli yaratildi!</p>
+    <button class="btn btn-primary" onclick="closeModal('successModal')">Davom Etish →</button>
+  </div>
+</div>
+
+<!-- DEMO MODAL -->
+<div class="modal-overlay" id="demoModal">
+  <div class="modal demo-modal">
+    <div class="demo-header">
+      <h2>⚡ Nexus Demo</h2>
+      <button class="modal-close" style="position:static;" onclick="closeModal('demoModal')">✕</button>
+    </div>
+    <div class="demo-body">
+      <div class="demo-screen">
+        <canvas id="demoCanvas"></canvas>
+        <div class="demo-label">NEXUS PLATFORM</div>
+        <div class="demo-sub">Real vaqt ma'lumotlar oqimi</div>
+      </div>
+      <div class="demo-stats">
+        <div class="demo-stat"><strong id="d1">0</strong><span>So'rovlar/sek</span></div>
+        <div class="demo-stat"><strong id="d2">0ms</strong><span>Javob vaqti</span></div>
+        <div class="demo-stat"><strong id="d3">0%</strong><span>Uptime</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">NEXUS</div>
+  <ul>
+    <li><a href="#hero">Bosh sahifa</a></li>
+    <li><a href="#xizmatlar">Xizmatlar</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#aloqa">Aloqa</a></li>
+  </ul>
+  <button class="btn btn-primary" style="padding:10px 28px;font-size:14px;" onclick="openModal('registerModal')">Boshlash →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">🚀 YANGI AVLOD TEXNOLOGIYASI</div>
+  <h1>Kelajak <span>Bugun</span><br>Boshlanadi</h1>
+  <p>Eng zamonaviy texnologiyalar bilan qurilgan platforma. Tezkor, xavfsiz va cheksiz imkoniyatlar.</p>
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="openModal('registerModal')">Bepul Boshlash →</button>
+    <button class="btn btn-outline" onclick="openModal('demoModal')">Demo Ko'rish ▶</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat"><div class="stat-num" data-target="50000">0</div><div class="stat-label">FOYDALANUVCHI</div></div>
+  <div class="stat"><div class="stat-num" data-target="99">0</div><div class="stat-label">% UPTIME</div></div>
+  <div class="stat"><div class="stat-num" data-target="150">0</div><div class="stat-label">MAMLAKAT</div></div>
+  <div class="stat"><div class="stat-num" data-target="24">0</div><div class="stat-label">/ 7 QOLLAB-QUVVATLASH</div></div>
+</div>
+
+<!-- CARDS -->
+<section class="section reveal" id="xizmatlar">
+  <div class="section-title">Nima <span>Taklif Etamiz</span></div>
+  <div class="section-sub">Eng yaxshi xizmatlar, eng past narxda</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>Ultra Tezkor</h3>
+      <p>Millisekundlarda javob beradigan infratuzilma. Dunyo bo'ylab CDN tarmoqlari.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <h3>Maksimal Xavfsizlik</h3>
+      <p>256-bit shifrlash, ikki faktorli autentifikatsiya va real vaqt monitoring.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>AI Quvvatlangan</h3>
+      <p>Sun'iy intellekt yordamida avtomatik optimizatsiya va aqlli tahlil.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Real Vaqt Analitika</h3>
+      <p>Har bir harakatni kuzating. Chuqur statistika va vizualizatsiya.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌍</div>
+      <h3>Global Tarmoq</h3>
+      <p>150+ mamlakatda serverlar. Istalgan joydan tezkor ulanish.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔧</div>
+      <h3>Oson Integratsiya</h3>
+      <p>1000+ ilovalar bilan bir marta bosish orqali ulaning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="showcase reveal">
+  <div class="showcase-grid">
+    <div class="showcase-text">
+      <h2>Kod Yozish<br><span>Hech Qachon</span><br>Bu Qadar Oson Emas Edi</h2>
+      <p>Zamonaviy API va SDK'lar bilan loyihangizni bir necha daqiqada ishga tushiring.</p>
+      <ul class="feature-list">
+        <li>Avtomatik deploy va CI/CD pipeline</li>
+        <li>100+ tayyor shablon va komponentlar</li>
+        <li>Real vaqt hamkorlik va versiya nazorati</li>
+        <li>Bir bosish bilan global tarqatish</li>
+      </ul>
+    </div>
+    <div class="showcase-visual">
+      <div class="code-block">
+        <div><span class="cm">// Nexus SDK</span></div>
+        <div><span class="kw">import</span> { <span class="fn">Nexus</span> } <span class="kw">from</span> <span class="str">'@nexus/core'</span></div>
+        <div></div>
+        <div><span class="kw">const</span> app = <span class="kw">new</span> <span class="fn">Nexus</span>({</div>
+        <div>&nbsp;&nbsp;key: <span class="str">'your-api-key'</span>,</div>
+        <div>&nbsp;&nbsp;region: <span class="str">'auto'</span>,</div>
+        <div>&nbsp;&nbsp;ai: <span class="kw">true</span></div>
+        <div>})</div>
+        <div></div>
+        <div><span class="kw">await</span> app.<span class="fn">deploy</span>() <span class="cm">// ✅ Done!</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials reveal" id="portfolio">
+  <div class="section-title">Foydalanuvchilar <span>Nima Deydi</span></div>
+  <div class="section-sub">Minglab mamnun mijozlar</div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Bu platforma bizning ishlab chiqarish tezligimizni 10 barobarga oshirdi. Ajoyib!"</p>
+      <div class="testi-author">
+        <div class="avatar">👨‍💻</div>
+        <div class="author-info"><strong>Jasur Toshmatov</strong><span>CTO, TechUz</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"Xavfsizlik va tezlik jihatidan tengi yo'q. Barcha loyihalarimizni ko'chirdik."</p>
+      <div class="testi-author">
+        <div class="avatar">👩‍💼</div>
+        <div class="author-info"><strong>Malika Yusupova</strong><span>Founder, StartupHub</span></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p>"24/7 qo'llab-quvvatlash va sodda interfeys. Boshqa hech narsani izlamayman."</p>
+      <div class="testi-author">
+        <div class="avatar">🧑‍🎨</div>
+        <div class="author-info"><strong>Bobur Karimov</strong><span>Lead Dev, CodeFactory</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta reveal">
+  <h2>Bugun <span>Boshlang</span></h2>
+  <p>Kredit karta shart emas. 14 kunlik bepul sinov.</p>
+  <div class="btn-group">
+    <button class="btn btn-primary" style="font-size:18px;padding:18px 56px;" onclick="openModal('registerModal')">Bepul Ro'yxatdan O'tish →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="aloqa">
+  <div class="logo">NEXUS</div>
+  <p>© 2025 Nexus. Barcha huquqlar himoyalangan.</p>
+  <div style="display:flex;gap:24px;">
+    <a href="#" style="color:#444;text-decoration:none;font-size:14px;">Maxfiylik</a>
+    <a href="#" style="color:#444;text-decoration:none;font-size:14px;">Shartlar</a>
+    <a href="#" style="color:#444;text-decoration:none;font-size:14px;">Aloqa</a>
+  </div>
+</footer>
+
+<script>
+// ===== PARTICLE BACKGROUND =====
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+const dots = Array.from({length: 120}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * 0.4,
+  vy: (Math.random() - 0.5) * 0.4,
+  r: Math.random() * 2 + 0.5
+}));
+
+let mx = -999, my = -999;
+window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  dots.forEach(d => {
+    d.x += d.vx; d.y += d.vy;
+    if (d.x < 0) d.x = canvas.width;
+    if (d.x > canvas.width) d.x = 0;
+    if (d.y < 0) d.y = canvas.height;
+    if (d.y > canvas.height) d.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,247,255,0.5)';
+    ctx.fill();
+  });
+
+  dots.forEach((a, i) => {
+    dots.slice(i+1).forEach(b => {
+      let dist = Math.hypot(a.x - b.x, a.y - b.y);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(0,247,255,${0.15 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    });
+    let md = Math.hypot(a.x - mx, a.y - my);
+    if (md < 150) {
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(mx, my);
+      ctx.strokeStyle = `rgba(255,0,255,${0.3 * (1 - md/150)})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ===== CUSTOM CURSOR =====
+const cur = document.getElementById('cursor');
+const cur2 = document.getElementById('cursor2');
+let cx = 0, cy = 0;
+document.addEventListener('mousemove', e => {
+  cur2.style.left = e.clientX - 3 + 'px';
+  cur2.style.top = e.clientY - 3 + 'px';
+  cx += (e.clientX - 10 - cx) * 0.15;
+  cy += (e.clientY - 10 - cy) * 0.15;
+  cur.style.left = cx + 'px';
+  cur.style.top = cy + 'px';
+});
+document.querySelectorAll('button, a, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.style.transform = 'scale(2)');
+  el.addEventListener('mouseleave', () => cur.style.transform = 'scale(1)');
+});
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== COUNT UP =====
+function countUp(el, target) {
+  let current = 0;
+  let step = target / 80;
+  let timer = setInterval(() => {
+    current += step;
+    if (current >= target) { current = target; clearInterval(timer); }
+    el.textContent = Math.floor(current).toLocaleString();
+  }, 20);
+}
+
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-target]').forEach(el => {
+        countUp(el, +el.dataset.target);
+      });
+      statsObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelector('.stats') && statsObserver.observe(document.querySelector('.stats'));
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+// ===== MODAL =====
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (id === 'demoModal') startDemo();
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+  if (id === 'demoModal') stopDemo();
+}
+function switchModal(from, to) {
+  closeModal(from);
+  setTimeout(() => openModal(to), 200);
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(overlay.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+});
+
+function handleRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name || !email || !pass) { shake('registerModal'); return; }
+  closeModal('registerModal');
+  document.getElementById('successMsg').textContent = `Xush kelibsiz, ${name}! Hisobingiz tayyor. 🚀`;
+  setTimeout(() => openModal('successModal'), 200);
+}
+function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) { shake('loginModal'); return; }
+  closeModal('loginModal');
+  document.getElementById('successMsg').textContent = 'Muvaffaqiyatli kirdingiz! Xush kelibsiz. ✅';
+  setTimeout(() => openModal('successModal'), 200);
+}
+function socialLogin(provider) {
+  document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+  document.getElementById('successMsg').textContent = `${provider} orqali muvaffaqiyatli kirdingiz! 🎉`;
+  setTimeout(() => openModal('successModal'), 200);
+}
+function shake(modalId) {
+  const modal = document.querySelector(`#${modalId} .modal`);
+  modal.style.animation = 'none'; void modal.offsetWidth;
+  modal.style.animation = 'shake 0.4s ease';
+}
+const shakeStyle = document.createElement('style');
+shakeStyle.textContent = `@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}`;
+document.head.appendChild(shakeStyle);
+
+// ===== DEMO =====
+let demoInterval = null, demoRaf = null;
+function startDemo() {
+  const dc = document.getElementById('demoCanvas');
+  const dctx = dc.getContext('2d');
+  setTimeout(() => {
+    dc.width = dc.offsetWidth; dc.height = dc.offsetHeight;
+    const ddots = Array.from({length:60}, () => ({
+      x: Math.random()*dc.width, y: Math.random()*dc.height,
+      vx: (Math.random()-0.5)*0.8, vy: (Math.random()-0.5)*0.8, r: Math.random()*2+0.5
+    }));
+    function drawDemo() {
+      dctx.clearRect(0,0,dc.width,dc.height);
+      ddots.forEach(d => {
+        d.x+=d.vx; d.y+=d.vy;
+        if(d.x<0)d.x=dc.width; if(d.x>dc.width)d.x=0;
+        if(d.y<0)d.y=dc.height; if(d.y>dc.height)d.y=0;
+        dctx.beginPath(); dctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+        dctx.fillStyle='rgba(0,247,255,0.7)'; dctx.fill();
+      });
+      ddots.forEach((a,i) => ddots.slice(i+1).forEach(b => {
+        let dist=Math.hypot(a.x-b.x,a.y-b.y);
+        if(dist<100){
+          dctx.beginPath(); dctx.moveTo(a.x,a.y); dctx.lineTo(b.x,b.y);
+          dctx.strokeStyle=`rgba(0,247,255,${0.2*(1-dist/100)})`; dctx.lineWidth=0.5; dctx.stroke();
+        }
+      }));
+      demoRaf = requestAnimationFrame(drawDemo);
+    }
+    drawDemo();
+  }, 50);
+  demoInterval = setInterval(() => {
+    document.getElementById('d1').textContent = (Math.floor(Math.random()*500+800)).toLocaleString();
+    document.getElementById('d2').textContent = Math.floor(Math.random()*10+2) + 'ms';
+    document.getElementById('d3').textContent = (99.9+Math.random()*0.09).toFixed(2) + '%';
+  }, 600);
+}
+function stopDemo() {
+  clearInterval(demoInterval);
+  cancelAnimationFrame(demoRaf);
+}
+</script>
+</body>
+</html>
